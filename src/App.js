@@ -2,14 +2,12 @@
 import React, { Component } from 'react';
 import {
   BrowserRouter as Router,
-  Route, 
-  // Switch 
+  Route
 } from 'react-router-dom'
 import './App.scss';
 import Home from './Component/Home';
 import Signin from './Component/Signin';
 import Signup from './Component/Signup';
-import Dashboard from './Component/Dashboard';
 
 const regexEmail = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 const siteName = window.location.hostname
@@ -25,30 +23,26 @@ const info = {
     twitter: "@twitter",
     youtube: "utube",
     facebook:"facebook",
-  }
+  },
+  server: "http://localhost:3333/facebook"
 }
 // console.log(typeof regexEmail)
-String.prototype.capitalize = function() {
-    return this.charAt(0).toUpperCase() + this.slice(1);
+const capitalize = function(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
 export default class App extends Component {
   state = {users: []}
-
   componentDidMount() { 
-    fetch('/users')
-      .then(res => res.text())
-      .then(users => this.setState({ users }));
   }
 
   render() {
     return (
       <Router>
-        <Route exact path="/"><Home siteName={siteName.capitalize()} info={info} regexEmail={regexEmail}/></Route>
-        <Route exact path="/signup"><Signup siteName={siteName.capitalize()} info={info} regexEmail={regexEmail}/></Route>
-        <Route exact path="/signin"><Signin siteName={siteName.capitalize()} info={info} regexEmail={regexEmail}/></Route>
-        <Route exact path="/dashboard"><Dashboard siteName={siteName.capitalize()} info={info}/></Route>
-      </Router>
+        <Route exact path="/"><Home siteName={capitalize(siteName)} info={info} regexEmail={regexEmail}/></Route>
+        <Route exact path="/signup"><Signup siteName={capitalize(siteName)} info={info} regexEmail={regexEmail}/></Route>
+        <Route exact path="/signin"><Signin siteName={capitalize(siteName)} info={info} regexEmail={regexEmail}/></Route>
+      </Router> 
     );
   }
 }

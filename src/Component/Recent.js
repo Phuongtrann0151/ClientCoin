@@ -1,10 +1,8 @@
-import React, { useState } from "react"
+import React from "react"
 import {
     Card,
-    ListGroup,
-    Tabs
+    ListGroup
 } from 'react-bootstrap';
-import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faShoppingCart, faArrowDown, faArrowUp, faMoneyBillWave } from '@fortawesome/free-solid-svg-icons'
 

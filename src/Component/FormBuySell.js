@@ -11,6 +11,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons'
 
 import addDot from "./Controler/addDotToNumberString"
+import bank from "./Config/bank"
 import Bill from "./Bill"
 
 const FormBuySell = (props) => {
@@ -22,21 +23,23 @@ const FormBuySell = (props) => {
     const [errAddressReceiveBuy, setErrAddressReceiveBuy] = useState("")
     const [paidBuy, setPaidBuy] = useState(0)
     const [infoBill, setInfoBill] = useState({})
-
-    const [addressReceiveSell, setAddressReceiveSell] = useState("")
+    // end buy
     const [quantitySell, setQuantitySell] = useState("")
     const [emailSell, setEmailSell] = useState("")
     const [paidSell, setPaidSell] = useState(0)
     const [errorQuantitySell, setErrorQuantitySell] = useState("")
+    const [errorEmailSell, setErrorEmailSell] = useState("")
     const [numberAccount, setNumberAccount] = useState("")
+    const [bankName, setBankName] = useState("")
     const [accountName, setAccountName] = useState("")
+    // end sell
 
     const [sttPostBuy, setSttPostBuy] = useState(false)
 
     const changePaidBuy = (val) =>{
 	    setQuantityBuy(val)
-	    setPaidBuy(val*props.priceBuy)
-    	if((val*props.priceBuy)<=props.limitTopBuy&&(val*props.priceBuy)>=props.limitBotBuy){
+	    setPaidBuy(val*props.price.priceBuy)
+    	if((val*props.price.priceBuy)<=props.price.limitTopBuy&&(val*props.price.priceBuy)>=props.price.limitBotBuy){
     		setErrorQuantityBuy("")
     	}else{
     		setErrorQuantityBuy("Vui lòng nhập số lượng trong giới hạn cho phép!")
@@ -50,6 +53,14 @@ const FormBuySell = (props) => {
     		setErrEmailBuy("Vui lòng nhập đúng định dạng email!")
     	}
     }
+    const validEmailSell = (val)=>{
+    	setEmailSell(val)
+    	if(props.regexEmail.test(val)){
+    		setErrorEmailSell("")
+    	}else{
+    		setErrorEmailSell("Vui lòng nhập đúng định dạng email!")
+    	}
+    }
     const validAddressBuy = (val)=>{
     	setAddressReceiveBuy(val)
     	if(/^[a-zA-Z0-9]+$/.test(val)){
@@ -60,21 +71,38 @@ const FormBuySell = (props) => {
     }
     const changePaidSell = (val) =>{
 	    setQuantitySell(val)
-	    setPaidSell(val*props.priceSell)
-    	if((val*props.priceSell)<=props.limitTopSell&&(val*props.priceSell)>=props.limitBotSell){
+	    setPaidSell(val*props.price.priceSell)
+    	if((val*props.price.priceSell)<=props.price.limitTopSell&&(val*props.price.priceSell)>=props.price.limitBotSell){
     		setErrorQuantitySell("")
     	}else{
     		setErrorQuantitySell("Vui lòng nhập số lượng trong giới hạn cho phép!")
     	}
     }
+    const validSubmitBuy = ()=>{
+    	if(!props.regexEmail.test(emailBuy))
+    		return false
+    	if(!(/^[0-9]+$/.test(quantityBuy)))
+    		return false
+    	if(!((quantityBuy*props.price.priceBuy)<=props.price.limitTopBuy&&(quantityBuy*props.price.priceBuy)>=props.price.limitBotBuy))
+    		return false
+    	if(!(/^[a-zA-Z0-9]+$/.test(addressReceiveBuy)))
+    		return false
+    	return true
+    }
+    const validNameAccount = (e)=>{
+    	if(/^[a-zA-Z ]+$/.test(e.target.value)){
+    		setAccountName(e.target.value.toUpperCase())
+    	}
+    }
     const submitBuy = async() =>{
-    	if(true){
+    	if(validSubmitBuy()){
 	    	var data = {
 	    		"quantity" : Number(quantityBuy),
 	    		"email"    : emailBuy,
 	    		"address"  : addressReceiveBuy
 	    	}
 	    	try{
+	    		console.log(data);
 	    		const submitFormBuy = await axios({
 		    		method: 'post',
 		            url: '/buycoin',
@@ -94,13 +122,60 @@ const FormBuySell = (props) => {
     		setErrorQuantityBuy("Vui lòng nhập số lượng coin cần mua!")
     	}
     }
-
+    const validSubmitSell = ()=>{
+    	if(!props.regexEmail.test(emailSell))
+    		return false
+    	if(!(/^[0-9]+$/.test(quantitySell)))
+    		return false
+    	if(!((quantitySell*props.price.priceSell)<=props.price.limitTopSell&&(quantitySell*props.price.priceSell)>=props.price.limitBotSell))
+    		return false
+    	if(bank.indexOf(bankName)===-1)
+    		return false
+    	if(!(/^[A-Z ]+$/.test(accountName)))
+    		return false
+    	if(!(/^[0-9]{4,}$/.test(numberAccount)))
+    		return false
+    	return true
+    }
+    const submitSell = async() =>{
+    	if(validSubmitSell()){
+	    	var data = {
+	    		"quantity"  	     : Number(quantitySell),
+	    		"email"       		 : emailSell,
+	    		"bank"     	   		 : bankName,
+	    		"accountNameBank"    : accountName,
+	    		"accountNumberBank"  : numberAccount
+	    	}
+	    	try{
+	    		const submitFormBuy = await axios({
+		    		method: 'post',
+		            url: '/sellcoin',
+		            headers: {
+		              'Content-Type': 'application/json'
+		            },
+		            data: data
+		    	})
+		    	console.log(data);
+	    		if(submitFormBuy.status===200){
+	    			setSttPostBuy(true)
+	    			setInfoBill(submitFormBuy.data)
+	    		}
+	    	}catch(e){
+	    		console.log(e);
+	    	}
+    	}else{
+    		setErrorQuantitySell("Vui lòng nhập số lượng coin cần bán!")
+    	}
+    }
+    const BankList = () => {
+		return bank.map(bankname=><option key={bankname} value={bankname}>{bankname}</option>)
+	}
     return (
         <div className="mt-4 shadow-container disable-mt-640 buysell">
             {(sttPostBuy)?(
             	<Bill
             		info = {infoBill}
-            		price = {props.priceBuy}
+            		price = {props.price}
             	/>
             	):(<Tabs
               	fill justify
@@ -117,7 +192,8 @@ const FormBuySell = (props) => {
 		            	value={quantityBuy} 
 		            	onChange={e=>changePaidBuy(e.target.value) } 
 		            	onKeyDown={ (evt) => evt.key === 'e' && evt.preventDefault()}
-		            	placeholder="Vui lòng nhập số lượng cần mua" 
+		            	placeholder="Vui lòng nhập số lượng cần mua"
+		            	min="0" 
 		            	required
 		            />
 		           	<span className="text-danger">{errorQuantityBuy}</span>
@@ -137,16 +213,15 @@ const FormBuySell = (props) => {
 		            <Form.Label>Số tiền cần thanh toán:</Form.Label>
 		            <Form.Control 
 		            	type="text" 
-		            	value={paidBuy} 
+		            	value={addDot(paidBuy)+" VND"}
 		            	className="bg-primary text-light text-right border-0" 
-		            	placeholder="Vui lòng nhập email nhận hoá đơn" 
 		            	readOnly
 		            />
 		          </Form.Group>
 		          <Form.Group>
 		            <Form.Label className="text-right w-100 text-danger">
 		            	<FontAwesomeIcon icon={faExclamationCircle} className="mr-2" />
-		            	Giới hạn : {addDot(props.limitBotBuy)} - {addDot(props.limitTopBuy)} VND
+		            	Giới hạn : {addDot(props.price.limitBotBuy)} - {addDot(props.price.limitTopBuy)} VND
 		            </Form.Label>
 		          </Form.Group>
 		          <Form.Group>
@@ -174,26 +249,28 @@ const FormBuySell = (props) => {
 			            	value={quantitySell} 
 			            	onChange={e=>changePaidSell(e.target.value) } 
 			            	onKeyDown={ (evt) => evt.key === 'e' && evt.preventDefault()}
-			            	placeholder="Vui lòng nhập số lượng cần mua" 
+			            	placeholder="Vui lòng nhập số lượng cần mua"
+			            	min="0"
 			            	required
 			            />
-			            <span className="text-danger">{errorQuantityBuy}</span>
+			            <span className="text-danger">{errorQuantitySell}</span>
 			          </Form.Group>
 			          <Form.Group>
 			            <Form.Label>Nhận hoá đơn giao dịch:</Form.Label>
 			            <Form.Control 
 			            	type="email" 
 			            	value={emailSell} 
-			            	onChange={e=>setEmailSell(e.target.value)} 
+			            	onChange={e=>validEmailSell(e.target.value)} 
 			            	placeholder="Vui lòng nhập email nhận hoá đơn" 
 			            	required
 			            />
+			            <span className="text-danger">{errorEmailSell}</span>
 			          </Form.Group>
 			          <Form.Group>
 			            <Form.Label>Tạm tính:</Form.Label>
 			            <Form.Control 
 			            	type="text" 
-			            	value={paidSell} 
+			            	value={addDot(paidSell)+" VND"} 
 			            	className="bg-primary text-light text-right border-0" 
 			            	placeholder="Vui lòng nhập email nhận hoá đơn" 
 			            	readOnly
@@ -202,65 +279,22 @@ const FormBuySell = (props) => {
 			          <Form.Group>
 			            <Form.Label className="text-right w-100 text-danger">
 			            	<FontAwesomeIcon icon={faExclamationCircle} className="mr-2" />
-			            	Giới hạn : {addDot(props.limitBotSell)} - {addDot(props.limitTopSell)} VND
+			            	Giới hạn : {addDot(props.price.limitBotSell)} - {addDot(props.price.limitTopSell)} VND
 			            </Form.Label>
 			          </Form.Group>
 			          <Form.Group>
 			            <Form.Label>Ngân hàng: </Form.Label>
-			            <Form.Control as="select" custom>
+			            <Form.Control as="select" custom value={bankName} onChange={(e)=>setBankName(e.target.value)}>
 						    <option>Vui lòng chọn</option>
-					      	<option>(AGRIBANK) Nông nghiệp và phát triển nông thôn Việt Nam</option>
-							<option>(BIDV) Đầu tư và phát triển Việt Nam</option>
-							<option>(VIETINBANK) Công Thương Việt Nam</option>
-							<option>(VPBANK) Việt Nam Thịnh Vượng</option>
-							<option>(ABBANK) An Bình</option>
-							<option>(ACB) Á Châu</option>
-							<option>(BAC A) Bắc Á</option>
-							<option>(BAO VIET BANK) Bảo Việt</option>
-							<option>(CBBANK) Ngân hàng Xây dựng </option>
-							<option>(CIMB) CIMB Bank Việt Nam</option>
-							<option>(DONG A BANK) Đông Á</option>
-							<option>(EXIMBANK) Xuất Nhập khẩu</option>
-							<option>(GPBANK) Dầu khí toàn cầu</option>
-							<option>(HD BANK) Phát triển TP.HCM</option>
-							<option>(HLBANK) Hong Leong Việt Nam</option>
-							<option>(HSBC) TNHH MTV HSBC Việt Nam </option>
-							<option>(IBK Bank) Công nghiệp Hàn Quốc </option>
-							<option>(IVB) Trách nhiệm hữu hạn Indovina</option>
-							<option>(KIEN LONG BANK) Kiên Long</option>
-							<option>(LIEN VIET POST BANK) Bưu điện Liên Việt</option>
-							<option>(MB) Quân Đội</option>
-							<option>(MSB - MARITIME BANK) Hàng Hải</option>
-							<option>(NAM A BANK) Nam Á</option>
-							<option>(NCB) Quốc Dân</option>
-							<option>(NHB) Nonghuyp - Chi nhánh Hà Nội</option>
-							<option>(OCB) Phương Đông</option>
-							<option>(OCEANBANK) Đại dương</option>
-							<option>(PGBANK) Xăng Dầu Petrolimex</option>
-							<option>(PUBLIC BANK) Đại chúng Việt Nam</option>
-							<option>(PVCOMBANK) Đại chúng</option>
-							<option>(SACOMBANK) Sài Gòn thương tín</option>
-							<option>(SAIGONBANK) Sài Gòn Công Thương</option>
-							<option>(SCB) Sài Gòn</option>
-							<option>(SCVN) TNHH MTV Standard Chartered Việt Nam </option>
-							<option>(SEABANK) Đông Nam Á</option>
-							<option>(SHB) Sài Gòn Hà Nội</option>
-							<option>(SHINHAN) Shinhan Bank Việt Nam</option>
-							<option>(TECHCOMBANK) Kỹ thương Việt Nam</option>
-							<option>(TPBANK) Tiên phong</option>
-							<option>(UOB VN) UOB Việt Nam</option>
-							<option>(VIB) Quốc tế</option>
-							<option>(VIET A BANK) Việt Á</option>
-							<option>(VIET CAPITAL BANK) Bản Việt</option>
-							<option>(VIETBANK) Việt Nam Thương Tín</option>
+					      	<BankList/>
 					    </Form.Control>
 			          </Form.Group>
 			          <Form.Group>
 			            <Form.Label>Tên chủ tài khoản nhận tiền:</Form.Label>
 			            <Form.Control 
-			            	type="email" 
+			            	type="text" 
 			            	value={accountName} 
-			            	onChange={e=>setAccountName(e.target.value)} 
+			            	onChange={e=>validNameAccount(e)} 
 			            	placeholder="Vui lòng nhập tên in trên thẻ/tên chủ tài khoản(không dấu)" 
 			            	required
 			            />
@@ -270,14 +304,15 @@ const FormBuySell = (props) => {
 			            <Form.Control 
 			            	type="number"
 		            		onKeyDown={ (evt) => evt.key === 'e' && evt.preventDefault()}
-			            	value={numberAccount} 
+			            	value={numberAccount}
+			            	min="0"
 			            	onChange={e=>setNumberAccount(e.target.value)} 
-			            	placeholder="Vui lòng nhập tên in trên thẻ/tên chủ tài khoản(không dấu)" 
+			            	placeholder="Vui lòng nhập số tài khoản hoặc số in trên thẻ" 
 			            	required
 			            />
 			          </Form.Group>
 			          <Form.Group className="d-flex flex-wrap pb-4">
-			            <Button variant="primary" className="submit" type="submit">Bán ngay</Button>
+			            <Button variant="primary" className="submit" onClick={()=>submitSell()} type="button">Bán ngay</Button>
 			          </Form.Group>
 			        </Form>
               </Tab>
@@ -290,12 +325,7 @@ FormBuySell.propTypes = {
     changeStatus: PropTypes.func,
     status: PropTypes.bool,
     regexEmail: PropTypes.object,
-    priceBuy: PropTypes.number,
-    priceSell: PropTypes.number,
-    limitBotBuy: PropTypes.number,
-    limitBotSell: PropTypes.number,
-    limitTopBuy: PropTypes.number,
-    limitTopSell: PropTypes.number,
+    price: PropTypes.object
 };
 
 export default FormBuySell

@@ -1,5 +1,5 @@
 import React, { 
-  useState
+  // useState
 } from 'react';
 import {
     Card
@@ -7,7 +7,7 @@ import {
 import PropTypes from 'prop-types';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPoll, faEnvelopeOpenText, faMobileAlt, faQuestionCircle } from '@fortawesome/free-solid-svg-icons'
+import { faPoll, faEnvelopeOpenText, faMobileAlt } from '@fortawesome/free-solid-svg-icons'
 import addDot from "./Controler/addDotToNumberString"
 
 
@@ -67,13 +67,13 @@ const Price = (props)=>{
           <hr/>
           <div>
             <Card.Title className="h6 text-info fw-400">Hỗ trợ :</Card.Title>
-            <Card.Body className="d-flex flex-wrap">
+            <Card.Body className="d-flex flex-wrap pl-0 pr-0">
               <a href={props.info.company.email} className="w-100 d-flex">
-                <FontAwesomeIcon icon={faEnvelopeOpenText} className="w-25"/>
+                <FontAwesomeIcon icon={faEnvelopeOpenText} className="w-25 mt-1"/>
                 <p className="fw-400">{props.info.company.email.split(":")[1]}</p>
               </a>
               <a href={props.info.company.phone} className="w-100 d-flex">
-                <FontAwesomeIcon icon={faMobileAlt} className="w-25"/>
+                <FontAwesomeIcon icon={faMobileAlt} className="w-25 mt-1"/>
                 <p className="fw-400">{props.info.company.phone.split(":")[1]}</p>
               </a>
             </Card.Body>

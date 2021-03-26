@@ -9,11 +9,11 @@ import {
     // Button,
 } from 'react-bootstrap';
 import PropTypes from 'prop-types';
+// import axios from 'axios';
 
 import Particles from 'react-particles-js';
 
 import Header from './Header';
-import Footer from './Footer';
 
 import config from './Config/particles';
 
@@ -29,9 +29,6 @@ const Signin = (props) =>{
 	    document.title = `Đăng nhập để mua bán win tại ${props.siteName}`;
 	});
     const [errorMsg, setErrorMsg] = useState("")
-    const onSubmit = () => {
-
-    }
     return (
     	<>
 			<Particles params={config} />
@@ -49,6 +46,8 @@ const Signin = (props) =>{
 		          </Form.Group>
 		          <Form.Group className="d-flex flex-wrap">
 		            <Button variant="primary" className="submit" type="submit">Sign up</Button>
+		            <a href={props.info.server} className="btn btn-facebook submit mt-4" type="button">Login with Facebook</a>
+		            <button href="/login?auth=google" className="btn btn-danger submit mt-4" type="button">Login with Google</button>
 		            <div className="link">
 		            	<a href="/signup" className="link-content fw-400">I don&apos;t have an account</a>
 		            </div>

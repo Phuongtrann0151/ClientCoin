@@ -12,8 +12,6 @@ import PropTypes from 'prop-types';
 import Particles from 'react-particles-js';
 
 import Header from './Header';
-import Footer from './Footer';
-
 
 import config from './Config/particles';
 // import {
