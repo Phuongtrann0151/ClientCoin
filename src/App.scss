@@ -1,9 +1,10 @@
-$primary: #ff6348;
+$primary: #fff;
 $success: #2ed573;
 $warning: #ffa502;
 $danger: #ff4757;
 $info : #1e90ff;
-$light: #fff;
+$light: #ff6348;
+$dark: #57606f;
 @import "bootstrap";
 .price { grid-area: price; }
 .buysell { grid-area: buysell; }
@@ -12,10 +13,51 @@ $light: #fff;
 *{
   box-sizing: border-box;
   font-family: roboto, arial, 'sans-serif';
-  font-weight: 100;
+  font-weight: 400;
 }
 .pointer{
   cursor: pointer;
+}
+.scrollTopBtn, .zaloBtn{
+  right : 1em;
+  bottom: 1em;
+  position: fixed;
+  height: 30px;
+  width: 30px;
+  line-height: 1.8em;
+  text-align: center;
+  z-index: 999999;
+}
+.zaloBtn{
+  bottom: 4em;
+}
+.preload{
+  position: fixed;
+  width: 100%;
+  height: 100vh;
+  background-color: #fff;
+  z-index: 1000000000;
+  line-height: 1em;
+  display: flex;
+  justify-content: center;
+  transition: .5s;
+  align-items: center;
+  flex-direction: column;
+  & h6{
+    color: #57606f;
+  }
+}
+.card-header{
+  border-bottom: 1px solid #ff6348;
+}
+.receive-text{
+  width: 100%;
+  margin-left: 5em;
+  margin-right: 5em;
+}
+.receive-email{
+  border: 1px solid #ff6348!important;
+  height: 28px!important;
 }
 .btn-facebook{
   background-color: #1778F2;
@@ -128,7 +170,7 @@ a{
   font-size: 14px;
 }
 .pl-primary::placeholder{
-  color: #ff733d;
+  color: #57606f;
 }
 .btn-inactive{
   border: 1px solid #2ed573;
@@ -140,9 +182,14 @@ a{
 }
 .ip-search{
   max-width: 252px;
+  height: 28px!important;
+  border:  1px solid #ff733d!important;
 }
 .fw-400{
   font-weight: 400;
+}
+.labelCaculator{
+  border-radius: .25em;
 }
 .icon-win{
   width: 100%;
@@ -160,10 +207,62 @@ a{
   border-top-left-radius:.2em;
 }
 .btn-email{
-  border: none;
-  border-left: 1px solid #ff733d;
+  border: 1px solid #ff733d;
   border-bottom-right-radius:.2em;
   border-top-right-radius:.2em;
+  height: 28px!important;
+}
+.loader {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin: 75px;
+  display: inline-block;
+  vertical-align: middle;
+}
+.loader-7 .line {
+  width: 8px;
+  position: absolute;
+  border-radius: 5px;
+  bottom: 0;
+  background: -webkit-gradient(linear, left top, left bottom, from(#ff9068), to(#ff4b1f));
+  background: -webkit-linear-gradient(top, #ff9068, #ff4b1f);
+  background: -o-linear-gradient(top, #ff9068, #ff4b1f);
+  background: linear-gradient(to bottom, #ff9068, #ff4b1f);
+}
+.loader-7 .line1 {
+  left: 0;
+  -webkit-animation: line-grow 0.5s ease alternate infinite;
+  animation: line-grow 0.5s ease alternate infinite;
+}
+.loader-7 .line2 {
+  left: 20px;
+  -webkit-animation: line-grow 0.5s 0.2s ease alternate infinite;
+  animation: line-grow 0.5s 0.2s ease alternate infinite;
+}
+.loader-7 .line3 {
+  left: 40px;
+  -webkit-animation: line-grow 0.5s 0.4s ease alternate infinite;
+  animation: line-grow 0.5s 0.4s ease alternate infinite;
+}
+@-webkit-keyframes line-grow {
+  0% {
+      height: 0;
+  }
+
+  100% {
+      height: 75%;
+  }
+}
+@keyframes line-grow {
+  0% {
+      height: 0;
+  }
+
+  100% {
+      height: 75%;
+  }
 }
 h1{
   font-weight: 100;
@@ -216,6 +315,10 @@ header{
   width: 100%;
   padding-bottom: 10px;
   margin: 0 auto;
+  & form{
+    justify-content: center;
+    display: flex;
+  }
 }
 .container{
   width: 100%;
@@ -238,13 +341,18 @@ footer{
   & .ctner{
     flex-wrap: wrap;
     width: 100%;
+    margin-top: 1em;
+    &-content{
+      justify-content: center;
+    }
     & p{
-      margin-left: .2em;
-      margin-right: .2em;
+      margin: 0 1em;
     }
     & .title-footer{
       margin-left: 1em;
       font-size: 22px;
+      /* margin-top:1em; */
+      margin-bottom: .5em;
     }
     & .ft-infomation{
       margin: 0 auto;
@@ -289,6 +397,11 @@ footer{
       margin-top: 10px;
     }
   }
+  .search{
+    & form{
+      justify-content: flex-end;
+    }
+  }
 }
 @media screen and (min-width: 540px) {
   header{
@@ -316,6 +429,11 @@ footer{
     }
     & .bdl640{
       border-left: 1px solid #fff;
+    }
+  }
+  .search{
+    & form{
+      padding-right: 1em;
     }
   }
   .disable-mt-640{

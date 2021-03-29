@@ -2,8 +2,6 @@
 @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
 .border-primary,
 .bg-primary,
-.btn-primary,
-.btn-primary:hover,
 .btn-primary:active,
 .btn-primary:visited,
 .btn-primary:focus {
@@ -12,6 +10,17 @@
 }
 .text-primary{
     color: #ff6348!important;
+}
+
+.logo2{
+    width: 40px;
+    height: 40px;
+    background: url('../images/logo2.png') no-repeat center center;
+    background-size: 150%;
+}
+.sitename-dashboard{
+    line-height: 2.3em;
+    margin-bottom: 0px;
 }
 *{
     font-weight: 400;
@@ -96,7 +105,7 @@ a, a:hover, a:focus {
     left: 0;
     height: 100vh;
     z-index: 999;
-    background: #ff7f50;
+    background: #74b9ff;
     color: #fff;
     transition: all 0.3s;
 }
@@ -106,7 +115,7 @@ a, a:hover, a:focus {
 }
 #sidebar .sidebar-header {
     padding: 20px;
-    background: #ff7f50;
+    background: #74b9ff;
 }
 
 #sidebar ul.components {
@@ -125,13 +134,13 @@ a, a:hover, a:focus {
     display: block;
 }
 #sidebar ul li a:hover {
-    color: #ff7f50;
+    color: #74b9ff;
     background: #fff;
 }
 
 #sidebar ul li.active > a, a[aria-expanded="true"] {
     color: #fff;
-    background: #ff6348;
+    background: #0984e3;
 }
 
 
@@ -213,6 +222,16 @@ a.article, a.article:hover {
     animation-name: shaking;
     animation-duration: 4s;
     animation-iteration-count: infinite;
+}
+.fs-14{
+    font-size: 14px;
+}
+.shadow-input{
+
+}
+.shadow-input:focus{
+    box-shadow: 1px 0 2px 1px #ec000033!important;
+    border-color: #ec000033;
 }
 @keyframes shaking {
   0%   {

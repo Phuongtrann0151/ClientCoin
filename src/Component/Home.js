@@ -19,9 +19,12 @@ import Particles from 'react-particles-js';
 import PropTypes from 'prop-types';
 import Header from './Header';
 import Footer from './Footer';
+import Preload from './Preload';
 import Price from './Price';
 import FormBuySell from './FormBuySell';
+import Bill from './Bill';
 import Recent from './Recent';
+import ScrollToTop from './ScrollToTop';
 
 import config from './Config/particles';
       // <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
@@ -34,40 +37,58 @@ const Home = (props) => {
           setPrice(data.data)
           setPriceBuy(data.data.priceBuy)
           setPriceSell(data.data.priceSell)
+          setTimeout(()=>setStyle({"opacity": 0, "zIndex": -99999}), 1500);
         }).catch(err=>{
           console.log(err);
-          // alert("ERROR CONNECT SERVER")
         })
       }
   });
+  const [style, setStyle] = useState({})
+  const [search, setSearch] = useState(false)
+  const [infoBill, setInfoBill] = useState({})
   const [price, setPrice] = useState({})
   const [priceBuy, setPriceBuy] = useState(0)
   const [priceSell, setPriceSell] = useState(0)
   const [statusBuySell, setStatusBuySell] = useState(true)
+  const changeBill = (stt, bill)=>{
+    setInfoBill(bill)
+    setSearch(stt)
+  }
   const changeStatus = (stt)=>{
     setStatusBuySell(stt)
   }
   return (
     <>
+      <Preload style={style} siteName={props.siteName}/>
       <Particles params={config} /> 
-      <Header siteName={props.siteName}/>
+      <Header siteName={props.siteName} changeBill={changeBill}/>
       <div className="mt-5 mb-5 body">
           <div className="container">
-            <h1 className="mb-5 fw-normal">{statusBuySell?"Mua":"Bán"} tiền điện tử nhanh chóng, an toàn, uy tín tại {props.siteName}</h1>
+            <h1 className="mb-5 fw-normal">{statusBuySell?"Mua":"Bán"} tiền điện tử nhanh chóng, an toàn, uy tín</h1>
             <div className="girdview">
               <Price 
                 info={props.info} 
                 changeStatus={changeStatus} 
                 status={statusBuySell} 
-                priceBuy={priceBuy} 
+                priceBuy={priceBuy}
+                siteName={props.siteName}
                 priceSell={priceSell}
               />
-              <FormBuySell
-                changeStatus={changeStatus} 
-                status={statusBuySell} 
-                regexEmail={props.regexEmail}
-                price={price}
-              />
+              {(search)?(
+                  <div className="mt-4 shadow-container disable-mt-640 buysell">
+                    <Bill
+                      info = {infoBill}
+                      price = {price}
+                    />
+                  </div>
+                ):(
+                  <FormBuySell
+                    changeStatus={changeStatus} 
+                    status={statusBuySell} 
+                    regexEmail={props.regexEmail}
+                    price={price}
+                  />
+                )}
               <Recent/>
               <div className="mt-4 shadow-container toturial">
                   <div>
@@ -111,6 +132,7 @@ const Home = (props) => {
           </div>
       </div>
       <Footer siteName={props.siteName} info={props.info} regexEmail={props.regexEmail}/>
+      <ScrollToTop/>
     </>
   );
 }

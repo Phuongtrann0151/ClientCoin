@@ -37,15 +37,15 @@ const Signin = (props) =>{
 	        	<h1 className="text-primary"><u className="fw-normal">Sign in to {props.siteName}</u></h1> { errorMsg && <p className="error">{errorMsg}</p> }
 		        <Form>
 		          <Form.Group>
-		            <Form.Label className="text-primary fw-400">Username</Form.Label>
+		            <Form.Label className="text-dark fw-400">Username</Form.Label>
 		            <Form.Control type="text" name="username" required />
 		          </Form.Group>
 		          <Form.Group>
-		            <Form.Label className="text-primary fw-400">Password</Form.Label>
+		            <Form.Label className="text-dark fw-400">Password</Form.Label>
 		            <Form.Control type="password" name="password" required />
 		          </Form.Group>
 		          <Form.Group className="d-flex flex-wrap">
-		            <Button variant="primary" className="submit" type="submit">Sign up</Button>
+		            <Button variant="light" className="submit" type="submit">Sign up</Button>
 		            <a href={props.info.server} className="btn btn-facebook submit mt-4" type="button">Login with Facebook</a>
 		            <button href="/login?auth=google" className="btn btn-danger submit mt-4" type="button">Login with Google</button>
 		            <div className="link">
@@ -57,9 +57,7 @@ const Signin = (props) =>{
 		    <footer className="bg-primary text-light flex-wrap pt-4 fixed-bottom">
 			    <div className="ctner custom-footer-1024">
 			        <h6 className="ft-infomation custom-footer-1024">
-			          <p className="text-light text-footer">© {new Date().getFullYear()} - <a href="/" className="text-light text-footer">{props.siteName}</a></p>
-			          <p className="text-light text-footer"> with power <a href="https://nodejs.org" className="text-light text-footer">Nodejs</a>.</p>
-			          <p className="text-light text-footer"> Design & Development by<a href={props.info.dev.facebook} className="text-light text-footer"> {props.info.dev.name}</a></p>
+			          <p className="text-dark text-footer">© {new Date().getFullYear()} - All Rights Reserved <a href="/" className="text-light text-footer">{props.siteName}</a> with power <a href="https://nodejs.org" className="text-light text-footer">Nodejs</a>. Development by<a href={props.info.dev.facebook} className="text-light text-footer"> {props.info.dev.name}</a></p>
 			        </h6>
 			    </div>
 		    </footer>

@@ -3,8 +3,7 @@ import {
 	Card,
 	Table,
 	OverlayTrigger,
-	Tooltip,
-	Button,
+	Tooltip
 } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -43,7 +42,7 @@ const Bill = (props) => {
 								    delay={{ show: 250, hide: 400 }}
 								    overlay={renderTooltip}
 								>
-					      			<b className="pointer" onClick={() => {cpclipboard(props.info._id)}}>{props.info._id}</b>
+					      			<b className="pointer" onClick={()=>{cpclipboard((!props.info.bank)?"BWC"+props.info.index:"SWC"+props.info.index)}}>{(!props.info.bank)?"BWC":"SWC"}{props.info.index}</b>
 								</OverlayTrigger>
 					      		<br/>
 					      		<FontAwesomeIcon className="text-warning mr-2" icon={faExclamationTriangle}/>

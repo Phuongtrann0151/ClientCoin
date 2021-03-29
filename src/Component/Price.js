@@ -14,8 +14,8 @@ import addDot from "./Controler/addDotToNumberString"
 const Price = (props)=>{
   return (
       <Card className="shadow-container price">
-        <Card.Header className="bg-primary text-light">
-          <Card.Title><FontAwesomeIcon icon={faPoll}/> Tỉ lệ giao dịch</Card.Title>
+        <Card.Header className="bg-primary text-dark">
+          <Card.Title><FontAwesomeIcon icon={faPoll} className="text-light"/> Tỉ lệ giao dịch</Card.Title>
         </Card.Header>
         <Card.Body>
           <div>
@@ -68,14 +68,11 @@ const Price = (props)=>{
           <div>
             <Card.Title className="h6 text-info fw-400">Hỗ trợ :</Card.Title>
             <Card.Body className="d-flex flex-wrap pl-0 pr-0">
-              <a href={props.info.company.email} className="w-100 d-flex">
+              <a href={"mailto:support@"+props.siteName.toLowerCase()+"."+props.siteName.split(".")[props.siteName.split(".").length-1].toLowerCase()} className="w-100 d-flex">
                 <FontAwesomeIcon icon={faEnvelopeOpenText} className="w-25 mt-1"/>
-                <p className="fw-400">{props.info.company.email.split(":")[1]}</p>
+                <p className="fw-400">{"support@"+props.siteName.toLowerCase()+"."+props.siteName.split(".")[props.siteName.split(".").length-1].toLowerCase()}</p>
               </a>
-              <a href={props.info.company.phone} className="w-100 d-flex">
-                <FontAwesomeIcon icon={faMobileAlt} className="w-25 mt-1"/>
-                <p className="fw-400">{props.info.company.phone.split(":")[1]}</p>
-              </a>
+              
             </Card.Body>
           </div>
         </Card.Body>
@@ -85,12 +82,19 @@ const Price = (props)=>{
 Price.propTypes = {
   info: PropTypes.object,
   changeStatus: PropTypes.func,
+  siteName: PropTypes.string,
   status: PropTypes.bool,
   priceSell: PropTypes.number,
   priceBuy: PropTypes.number
 };
 
 export default Price;
+// <a href={props.info.company.phone} className="w-100 d-flex">
+//   <FontAwesomeIcon icon={faMobileAlt} className="w-25 mt-1"/>
+//   <p className="fw-400">{props.info.company.phone.split(":")[1]}</p>
+// </a>
+
+
 
 // onClick={()=>setStatusBuySell(true)
   // onClick={()=>setStatusBuySell(false)}

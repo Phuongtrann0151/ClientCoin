@@ -119,19 +119,25 @@ const FormBuySell = (props) => {
 	    		console.log(e);
 	    	}
     	}else{
-    		setErrorQuantityBuy("Vui lòng nhập số lượng coin cần mua!")
+    		setErrorQuantityBuy("Vui lòng điền đầy đủ thông tin!")
     	}
     }
     const validSubmitSell = ()=>{
-    	if(!props.regexEmail.test(emailSell))
+    	if(!props.regexEmail.test(emailSell)){
+    		setErrorEmailSell("Vui lòng nhập đúng định dạng email!")
     		return false
-    	if(!(/^[0-9]+$/.test(quantitySell)))
+    	}
+    	if(!(/^[0-9]+$/.test(quantitySell))){
+    		setErrorQuantitySell("Vui lòng nhập đúng định dạng!")
     		return false
-    	if(!((quantitySell*props.price.priceSell)<=props.price.limitTopSell&&(quantitySell*props.price.priceSell)>=props.price.limitBotSell))
+    	}
+    	if(!((quantitySell*props.price.priceSell)<=props.price.limitTopSell&&(quantitySell*props.price.priceSell)>=props.price.limitBotSell)){
+    		setErrorQuantitySell("Vui lòng nhập số lượng trong giới hạn cho phép!")
     		return false
+    	}
     	if(bank.indexOf(bankName)===-1)
     		return false
-    	if(!(/^[A-Z ]+$/.test(accountName)))
+    	if(!(/^[A-Z ]+$/.test(accountName))||accountName==="")
     		return false
     	if(!(/^[0-9]{4,}$/.test(numberAccount)))
     		return false
@@ -164,7 +170,7 @@ const FormBuySell = (props) => {
 	    		console.log(e);
 	    	}
     	}else{
-    		setErrorQuantitySell("Vui lòng nhập số lượng coin cần bán!")
+    		setTimeout(()=>setErrorQuantitySell("Vui lòng điền đầy đủ thông tin"), 1000);
     	}
     }
     const BankList = () => {
@@ -191,6 +197,7 @@ const FormBuySell = (props) => {
 		            	type="number" 
 		            	value={quantityBuy} 
 		            	onChange={e=>changePaidBuy(e.target.value) } 
+		            	onKeyPress={(e)=>(e.charCode===13||e.key==="Enter")?submitBuy():null}
 		            	onKeyDown={ (evt) => evt.key === 'e' && evt.preventDefault()}
 		            	placeholder="Vui lòng nhập số lượng cần mua"
 		            	min="0" 
@@ -205,6 +212,7 @@ const FormBuySell = (props) => {
 		            	value={emailBuy} 
 		            	onChange={e=>validEmailBuy(e.target.value)} 
 		            	placeholder="Vui lòng nhập email nhận hoá đơn" 
+		            	onKeyPress={(e)=>(e.charCode===13||e.key==="Enter")?submitBuy():null}
 		            	required
 		            />
 		            <span className="text-danger">{errEmailBuy}</span>
@@ -214,12 +222,12 @@ const FormBuySell = (props) => {
 		            <Form.Control 
 		            	type="text" 
 		            	value={addDot(paidBuy)+" VND"}
-		            	className="bg-primary text-light text-right border-0" 
+		            	className="bg-primary text-dark text-right border border-light p-1 labelCaculator" 
 		            	readOnly
 		            />
 		          </Form.Group>
 		          <Form.Group>
-		            <Form.Label className="text-right w-100 text-danger">
+		            <Form.Label className="text-right w-100 text-danger fw-400">
 		            	<FontAwesomeIcon icon={faExclamationCircle} className="mr-2" />
 		            	Giới hạn : {addDot(props.price.limitBotBuy)} - {addDot(props.price.limitTopBuy)} VND
 		            </Form.Label>
@@ -231,12 +239,13 @@ const FormBuySell = (props) => {
 		            	value={addressReceiveBuy} 
 		            	className=""
 		            	onChange={e=>validAddressBuy(e.target.value)}
+		            	onKeyPress={(e)=>(e.charCode===13||e.key==="Enter")?submitBuy():null}
 		            	placeholder="Vui lòng nhập địa chỉ nhận coin"
 		            />
 		            <span className="text-danger">{errAddressReceiveBuy}</span>
 		          </Form.Group>
-		          <Form.Group className="d-flex flex-wrap  pb-4">
-		            <Button variant="primary" className="submit" onClick={()=>submitBuy()} type="button">Mua ngay</Button>
+		          <Form.Group className="d-flex flex-wrap pb-4">
+		            <Button variant="light" className="submit" onClick={()=>submitBuy()} type="button">Mua ngay</Button>
 		          </Form.Group>
 		        </Form>
               </Tab>
@@ -249,6 +258,7 @@ const FormBuySell = (props) => {
 			            	value={quantitySell} 
 			            	onChange={e=>changePaidSell(e.target.value) } 
 			            	onKeyDown={ (evt) => evt.key === 'e' && evt.preventDefault()}
+			            	onKeyPress={(e)=>(e.charCode===13||e.key==="Enter")?submitSell():null}
 			            	placeholder="Vui lòng nhập số lượng cần mua"
 			            	min="0"
 			            	required
@@ -261,6 +271,7 @@ const FormBuySell = (props) => {
 			            	type="email" 
 			            	value={emailSell} 
 			            	onChange={e=>validEmailSell(e.target.value)} 
+			            	onKeyPress={(e)=>(e.charCode===13||e.key==="Enter")?submitSell():null}
 			            	placeholder="Vui lòng nhập email nhận hoá đơn" 
 			            	required
 			            />
@@ -271,7 +282,7 @@ const FormBuySell = (props) => {
 			            <Form.Control 
 			            	type="text" 
 			            	value={addDot(paidSell)+" VND"} 
-			            	className="bg-primary text-light text-right border-0" 
+			            	className="bg-primary text-dark text-right border-0" 
 			            	placeholder="Vui lòng nhập email nhận hoá đơn" 
 			            	readOnly
 			            />
@@ -295,6 +306,7 @@ const FormBuySell = (props) => {
 			            	type="text" 
 			            	value={accountName} 
 			            	onChange={e=>validNameAccount(e)} 
+			            	onKeyPress={(e)=>(e.charCode===13||e.key==="Enter")?submitSell():null}
 			            	placeholder="Vui lòng nhập tên in trên thẻ/tên chủ tài khoản(không dấu)" 
 			            	required
 			            />
@@ -306,13 +318,14 @@ const FormBuySell = (props) => {
 		            		onKeyDown={ (evt) => evt.key === 'e' && evt.preventDefault()}
 			            	value={numberAccount}
 			            	min="0"
+			            	onKeyPress={(e)=>(e.charCode===13||e.key==="Enter")?submitSell():null}
 			            	onChange={e=>setNumberAccount(e.target.value)} 
 			            	placeholder="Vui lòng nhập số tài khoản hoặc số in trên thẻ" 
 			            	required
 			            />
 			          </Form.Group>
 			          <Form.Group className="d-flex flex-wrap pb-4">
-			            <Button variant="primary" className="submit" onClick={()=>submitSell()} type="button">Bán ngay</Button>
+			            <Button variant="light" className="submit" onClick={()=>submitSell()} type="button">Bán ngay</Button>
 			          </Form.Group>
 			        </Form>
               </Tab>
