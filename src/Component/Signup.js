@@ -24,7 +24,7 @@ import config from './Config/particles';
 const Signup = (props) =>{
 	console.log(props)
 	useEffect(() => {
-	    document.title = `Đăng ký mua bán win tại ${props.siteName}`;
+	    document.title = `Đăng ký mua bán win tại ${props.siteName.split(/\./)[0]}`;
 	});
     const [errorMsg, setErrorMsg] = useState("")
     const onSubmit = () => {

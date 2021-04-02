@@ -10,7 +10,7 @@ import Signin from './Component/Signin';
 import Signup from './Component/Signup';
 
 const regexEmail = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-const siteName = window.location.hostname.split(/www./)[window.location.hostname.split(/www./).length-1].split(/\./)[0]//=> *.name.details => name
+const siteName = window.location.hostname.split(/www./)[window.location.hostname.split(/www./).length-1]//=> *.name.details => name
 const info = { 
   dev : { 
     facebook: "https://www.facebook.com/vanvietquocanh/",
@@ -23,7 +23,7 @@ const info = {
     youtube: "/",
     facebook:"/"
   },
-  server: "http://localhost:3333/facebook"
+  server: "/facebook"
 }
 // console.log(typeof regexEmail)
 const capitalize = function(str) {

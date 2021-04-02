@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons'
+import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3';
 
 import addDot from "./Controler/addDotToNumberString"
 import bank from "./Config/bank"
@@ -36,146 +37,143 @@ const FormBuySell = (props) => {
 
     const [sttPostBuy, setSttPostBuy] = useState(false)
 
-    const changePaidBuy = (val) =>{
-	    setQuantityBuy(val)
-	    setPaidBuy(val*props.price.priceBuy)
-    	if((val*props.price.priceBuy)<=props.price.limitTopBuy&&(val*props.price.priceBuy)>=props.price.limitBotBuy){
-    		setErrorQuantityBuy("")
-    	}else{
-    		setErrorQuantityBuy("Vui lòng nhập số lượng trong giới hạn cho phép!")
-    	}
+    const changePaidBuy = (val) => {
+        setQuantityBuy(val)
+        setPaidBuy(val * props.price.priceBuy)
+        if ((val * props.price.priceBuy) <= props.price.limitTopBuy && (val * props.price.priceBuy) >= props.price.limitBotBuy) {
+            setErrorQuantityBuy("")
+        } else {
+            setErrorQuantityBuy("Vui lòng nhập số lượng trong giới hạn cho phép!")
+        }
     }
-    const validEmailBuy = (val)=>{
-    	setEmailBuy(val)
-    	if(props.regexEmail.test(val)){
-    		setErrEmailBuy("")
-    	}else{
-    		setErrEmailBuy("Vui lòng nhập đúng định dạng email!")
-    	}
+    const validEmailBuy = (val) => {
+        setEmailBuy(val)
+        if (props.regexEmail.test(val)) {
+            setErrEmailBuy("")
+        } else {
+            setErrEmailBuy("Vui lòng nhập đúng định dạng email!")
+        }
     }
-    const validEmailSell = (val)=>{
-    	setEmailSell(val)
-    	if(props.regexEmail.test(val)){
-    		setErrorEmailSell("")
-    	}else{
-    		setErrorEmailSell("Vui lòng nhập đúng định dạng email!")
-    	}
+    const validEmailSell = (val) => {
+        setEmailSell(val)
+        if (props.regexEmail.test(val)) {
+            setErrorEmailSell("")
+        } else {
+            setErrorEmailSell("Vui lòng nhập đúng định dạng email!")
+        }
     }
-    const validAddressBuy = (val)=>{
-    	setAddressReceiveBuy(val)
-    	if(/^[a-zA-Z0-9]+$/.test(val)){
-    		setErrAddressReceiveBuy("")
-    	}else{
-    		setErrAddressReceiveBuy("Vui lòng nhập đúng định dạng địa chỉ nhận coin!")
-    	}
+    const validAddressBuy = (val) => {
+        setAddressReceiveBuy(val)
+        if (/^[a-zA-Z0-9]+$/.test(val)) {
+            setErrAddressReceiveBuy("")
+        } else {
+            setErrAddressReceiveBuy("Vui lòng nhập đúng định dạng địa chỉ nhận coin!")
+        }
     }
-    const changePaidSell = (val) =>{
-	    setQuantitySell(val)
-	    setPaidSell(val*props.price.priceSell)
-    	if((val*props.price.priceSell)<=props.price.limitTopSell&&(val*props.price.priceSell)>=props.price.limitBotSell){
-    		setErrorQuantitySell("")
-    	}else{
-    		setErrorQuantitySell("Vui lòng nhập số lượng trong giới hạn cho phép!")
-    	}
+    const changePaidSell = (val) => {
+        setQuantitySell(val)
+        setPaidSell(val * props.price.priceSell)
+        if ((val * props.price.priceSell) <= props.price.limitTopSell && (val * props.price.priceSell) >= props.price.limitBotSell) {
+            setErrorQuantitySell("")
+        } else {
+            setErrorQuantitySell("Vui lòng nhập số lượng trong giới hạn cho phép!")
+        }
     }
-    const validSubmitBuy = ()=>{
-    	if(!props.regexEmail.test(emailBuy))
-    		return false
-    	if(!(/^[0-9]+$/.test(quantityBuy)))
-    		return false
-    	if(!((quantityBuy*props.price.priceBuy)<=props.price.limitTopBuy&&(quantityBuy*props.price.priceBuy)>=props.price.limitBotBuy))
-    		return false
-    	if(!(/^[a-zA-Z0-9]+$/.test(addressReceiveBuy)))
-    		return false
-    	return true
+    const validSubmitBuy = () => {
+        if (!props.regexEmail.test(emailBuy))
+            return false
+        if (!(/^[0-9]+$/.test(quantityBuy)))
+            return false
+        if (!((quantityBuy * props.price.priceBuy) <= props.price.limitTopBuy && (quantityBuy * props.price.priceBuy) >= props.price.limitBotBuy))
+            return false
+        if (!(/^[a-zA-Z0-9]+$/.test(addressReceiveBuy)))
+            return false
+        return true
     }
-    const validNameAccount = (e)=>{
-    	if(/^[a-zA-Z ]+$/.test(e.target.value)){
-    		setAccountName(e.target.value.toUpperCase())
-    	}
+    const validNameAccount = (e) => {
+        if (/^[a-zA-Z ]+$/.test(e.target.value)) {
+            setAccountName(e.target.value.toUpperCase())
+        }
     }
-    const submitBuy = async() =>{
-    	if(validSubmitBuy()){
-	    	var data = {
-	    		"quantity" : Number(quantityBuy),
-	    		"email"    : emailBuy,
-	    		"address"  : addressReceiveBuy
-	    	}
-	    	try{
-	    		console.log(data);
-	    		const submitFormBuy = await axios({
-		    		method: 'post',
-		            url: '/buycoin',
-		            headers: {
-		              'Content-Type': 'application/json'
-		            },
-		            data: data
-		    	})
-	    		if(submitFormBuy.status===200){
-	    			setSttPostBuy(true)
-	    			setInfoBill(submitFormBuy.data)
-	    		}
-	    	}catch(e){
-	    		console.log(e);
-	    	}
-    	}else{
-    		setErrorQuantityBuy("Vui lòng điền đầy đủ thông tin!")
-    	}
+    const submitBuy = async () => {
+        if (validSubmitBuy()) {
+            var data = {
+                "quantity": Number(quantityBuy),
+                "email": emailBuy,
+                "address": addressReceiveBuy
+            }
+            try {
+                const submitFormBuy = await axios({
+                    method: 'post',
+                    url: '/buycoin',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    data: data
+                })
+                if (submitFormBuy.status === 200) {
+                    setSttPostBuy(true)
+                    setInfoBill(submitFormBuy.data)
+                }
+            } catch (e) {}
+        } else {
+            setErrorQuantityBuy("Vui lòng điền đầy đủ thông tin!")
+        }
     }
-    const validSubmitSell = ()=>{
-    	if(!props.regexEmail.test(emailSell)){
-    		setErrorEmailSell("Vui lòng nhập đúng định dạng email!")
-    		return false
-    	}
-    	if(!(/^[0-9]+$/.test(quantitySell))){
-    		setErrorQuantitySell("Vui lòng nhập đúng định dạng!")
-    		return false
-    	}
-    	if(!((quantitySell*props.price.priceSell)<=props.price.limitTopSell&&(quantitySell*props.price.priceSell)>=props.price.limitBotSell)){
-    		setErrorQuantitySell("Vui lòng nhập số lượng trong giới hạn cho phép!")
-    		return false
-    	}
-    	if(bank.indexOf(bankName)===-1)
-    		return false
-    	if(!(/^[A-Z ]+$/.test(accountName))||accountName==="")
-    		return false
-    	if(!(/^[0-9]{4,}$/.test(numberAccount)))
-    		return false
-    	return true
+    const validSubmitSell = () => {
+        if (!props.regexEmail.test(emailSell)) {
+            setErrorEmailSell("Vui lòng nhập đúng định dạng email!")
+            return false
+        }
+        if (!(/^[0-9]+$/.test(quantitySell))) {
+            setErrorQuantitySell("Vui lòng nhập đúng định dạng!")
+            return false
+        }
+        if (!((quantitySell * props.price.priceSell) <= props.price.limitTopSell && (quantitySell * props.price.priceSell) >= props.price.limitBotSell)) {
+            setErrorQuantitySell("Vui lòng nhập số lượng trong giới hạn cho phép!")
+            return false
+        }
+        if (bank.indexOf(bankName) === -1)
+            return false
+        if (!(/^[A-Z ]+$/.test(accountName)) || accountName === "")
+            return false
+        if (!(/^[0-9]{4,}$/.test(numberAccount)))
+            return false
+        return true
     }
-    const submitSell = async() =>{
-    	if(validSubmitSell()){
-	    	var data = {
-	    		"quantity"  	     : Number(quantitySell),
-	    		"email"       		 : emailSell,
-	    		"bank"     	   		 : bankName,
-	    		"accountNameBank"    : accountName,
-	    		"accountNumberBank"  : numberAccount
-	    	}
-	    	try{
-	    		const submitFormBuy = await axios({
-		    		method: 'post',
-		            url: '/sellcoin',
-		            headers: {
-		              'Content-Type': 'application/json'
-		            },
-		            data: data
-		    	})
-		    	console.log(data);
-	    		if(submitFormBuy.status===200){
-	    			setSttPostBuy(true)
-	    			setInfoBill(submitFormBuy.data)
-	    		}
-	    	}catch(e){
-	    		console.log(e);
-	    	}
-    	}else{
-    		setTimeout(()=>setErrorQuantitySell("Vui lòng điền đầy đủ thông tin"), 1000);
-    	}
+    const submitSell = async () => {
+        if (validSubmitSell()) {
+            var data = {
+                "quantity": Number(quantitySell),
+                "email": emailSell,
+                "bank": bankName,
+                "accountNameBank": accountName,
+                "accountNumberBank": numberAccount
+            }
+            try {
+                const submitFormBuy = await axios({
+                    method: 'post',
+                    url: '/sellcoin',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    data: data
+                })
+                console.log(data);
+                if (submitFormBuy.status === 200) {
+                    setSttPostBuy(true)
+                    setInfoBill(submitFormBuy.data)
+                }
+            } catch (e) {
+                console.log(e);
+            }
+        } else {
+            setTimeout(() => setErrorQuantitySell("Vui lòng điền đầy đủ thông tin"), 1000);
+        }
     }
     const BankList = () => {
-		return bank.map(bankname=><option key={bankname} value={bankname}>{bankname}</option>)
-	}
+        return bank.map(bankname => <option key={bankname} value={bankname}>{bankname}</option>)
+    }
     return (
         <div className="mt-4 shadow-container disable-mt-640 buysell">
             {(sttPostBuy)?(
@@ -191,62 +189,75 @@ const FormBuySell = (props) => {
             >
               <Tab eventKey="true" title="Mua ngay" className="w-90 custom-tab-content">
                 <Form>
-		          <Form.Group>
-		            <Form.Label>Số lượng:</Form.Label>
-		            <Form.Control 
-		            	type="number" 
-		            	value={quantityBuy} 
-		            	onChange={e=>changePaidBuy(e.target.value) } 
-		            	onKeyPress={(e)=>(e.charCode===13||e.key==="Enter")?submitBuy():null}
-		            	onKeyDown={ (evt) => evt.key === 'e' && evt.preventDefault()}
-		            	placeholder="Vui lòng nhập số lượng cần mua"
-		            	min="0" 
-		            	required
-		            />
-		           	<span className="text-danger">{errorQuantityBuy}</span>
-		          </Form.Group>
-		          <Form.Group>
-		            <Form.Label>Nhận hoá đơn giao dịch:</Form.Label>
-		            <Form.Control 
-		            	type="email" 
-		            	value={emailBuy} 
-		            	onChange={e=>validEmailBuy(e.target.value)} 
-		            	placeholder="Vui lòng nhập email nhận hoá đơn" 
-		            	onKeyPress={(e)=>(e.charCode===13||e.key==="Enter")?submitBuy():null}
-		            	required
-		            />
-		            <span className="text-danger">{errEmailBuy}</span>
-		          </Form.Group>
-		          <Form.Group>
-		            <Form.Label>Số tiền cần thanh toán:</Form.Label>
-		            <Form.Control 
-		            	type="text" 
-		            	value={addDot(paidBuy)+" VND"}
-		            	className="bg-primary text-dark text-right border border-light p-1 labelCaculator" 
-		            	readOnly
-		            />
-		          </Form.Group>
-		          <Form.Group>
-		            <Form.Label className="text-right w-100 text-danger fw-400">
-		            	<FontAwesomeIcon icon={faExclamationCircle} className="mr-2" />
-		            	Giới hạn : {addDot(props.price.limitBotBuy)} - {addDot(props.price.limitTopBuy)} VND
-		            </Form.Label>
-		          </Form.Group>
-		          <Form.Group>
-		            <Form.Label>Địa chỉ nhận coin:</Form.Label>
-		            <Form.Control 
-		            	type="text" 
-		            	value={addressReceiveBuy} 
-		            	className=""
-		            	onChange={e=>validAddressBuy(e.target.value)}
-		            	onKeyPress={(e)=>(e.charCode===13||e.key==="Enter")?submitBuy():null}
-		            	placeholder="Vui lòng nhập địa chỉ nhận coin"
-		            />
-		            <span className="text-danger">{errAddressReceiveBuy}</span>
-		          </Form.Group>
-		          <Form.Group className="d-flex flex-wrap pb-4">
-		            <Button variant="light" className="submit" onClick={()=>submitBuy()} type="button">Mua ngay</Button>
-		          </Form.Group>
+	                <GoogleReCaptchaProvider
+					    reCaptchaKey="AIzaSyDKMjAOD03gE--UXQXbsdUe6hC-9Bgn9v0"
+					    language="VN"
+					    useRecaptchaNet="true"
+					    useEnterprise="true"
+					    scriptProps={{
+					      async: false, // optional, default to false,
+					      defer: false, // optional, default to false
+					      appendTo: "head", // optional, default to "head", can be "head" or "body",
+					      nonce: undefined // optional, default undefined
+					    }}
+					  >
+			          <Form.Group>
+			            <Form.Label>Số lượng:</Form.Label>
+			            <Form.Control 
+			            	type="number" 
+			            	value={quantityBuy} 
+			            	onChange={e=>changePaidBuy(e.target.value) } 
+			            	onKeyPress={(e)=>(e.charCode===13||e.key==="Enter")?submitBuy():null}
+			            	onKeyDown={ (evt) => evt.key === 'e' && evt.preventDefault()}
+			            	placeholder="Vui lòng nhập số lượng cần mua"
+			            	min="0" 
+			            	required
+			            />
+			           	<span className="text-danger">{errorQuantityBuy}</span>
+			          </Form.Group>
+			          <Form.Group>
+			            <Form.Label>Nhận hoá đơn giao dịch:</Form.Label>
+			            <Form.Control 
+			            	type="email" 
+			            	value={emailBuy} 
+			            	onChange={e=>validEmailBuy(e.target.value)} 
+			            	placeholder="Vui lòng nhập email nhận hoá đơn" 
+			            	onKeyPress={(e)=>(e.charCode===13||e.key==="Enter")?submitBuy():null}
+			            	required
+			            />
+			            <span className="text-danger">{errEmailBuy}</span>
+			          </Form.Group>
+			          <Form.Group>
+			            <Form.Label>Số tiền cần thanh toán:</Form.Label>
+			            <Form.Control 
+			            	type="text" 
+			            	value={addDot(paidBuy)+" VND"}
+			            	className="bg-primary text-dark text-right border border-light p-1 labelCaculator" 
+			            	readOnly
+			            />
+			          </Form.Group>
+			          <Form.Group>
+			            <Form.Label className="text-right w-100 text-danger fw-400">
+			            	<FontAwesomeIcon icon={faExclamationCircle} className="mr-2" />
+			            	Giới hạn : {addDot(props.price.limitBotBuy)} - {addDot(props.price.limitTopBuy)} VND
+			            </Form.Label>
+			          </Form.Group>
+			          <Form.Group>
+			            <Form.Label>Địa chỉ nhận coin:</Form.Label>
+			            <Form.Control 
+			            	type="text" 
+			            	value={addressReceiveBuy} 
+			            	className=""
+			            	onChange={e=>validAddressBuy(e.target.value)}
+			            	onKeyPress={(e)=>(e.charCode===13||e.key==="Enter")?submitBuy():null}
+			            	placeholder="Vui lòng nhập địa chỉ nhận coin"
+			            />
+			            <span className="text-danger">{errAddressReceiveBuy}</span>
+			          </Form.Group>
+			          <Form.Group className="d-flex flex-wrap pb-4">
+			            <Button variant="light" className="submit" onClick={()=>submitBuy()} type="button">Mua ngay</Button>
+			          </Form.Group>
+		          </GoogleReCaptchaProvider>
 		        </Form>
               </Tab>
               <Tab eventKey="false" title="Bán Ngay" className="w-90 custom-tab-content">

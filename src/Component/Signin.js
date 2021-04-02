@@ -26,7 +26,7 @@ import config from './Config/particles';
 
 const Signin = (props) =>{
 	useEffect(() => {
-	    document.title = `Đăng nhập để mua bán win tại ${props.siteName}`;
+	    document.title = `Đăng nhập để mua bán win tại ${props.siteName.split(/\./)[0]}`;
 	});
     const [errorMsg, setErrorMsg] = useState("")
     return (

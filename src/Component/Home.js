@@ -31,7 +31,7 @@ import config from './Config/particles';
 
 const Home = (props) => {
   useEffect(() => {
-      document.title = `Giao dịch mua bán win ${props.siteName}`;
+      document.title = `Giao dịch mua bán win ${props.siteName.split(/\./)[0]}`;
       if(priceBuy===0){
         axios.get("/price").then(data=>{
           setPrice(data.data)
@@ -59,9 +59,9 @@ const Home = (props) => {
   }
   return (
     <>
-      <Preload style={style} siteName={props.siteName}/>
+      <Preload style={style} siteName={props.siteName.split(/\./)[0]}/>
       <Particles params={config} /> 
-      <Header siteName={props.siteName} changeBill={changeBill}/>
+      <Header siteName={props.siteName.split(/\./)[0]} changeBill={changeBill}/>
       <div className="mt-5 mb-5 body">
           <div className="container">
             <h1 className="mb-5 fw-normal">{statusBuySell?"Mua":"Bán"} tiền điện tử nhanh chóng, an toàn, uy tín</h1>
@@ -89,7 +89,7 @@ const Home = (props) => {
                     price={price}
                   />
                 )}
-              <Recent/>
+              <Recent price = {price}/>
               <div className="mt-4 shadow-container toturial">
                   <div>
                     {(statusBuySell)?(
@@ -131,7 +131,7 @@ const Home = (props) => {
             </div>
           </div>
       </div>
-      <Footer siteName={props.siteName} info={props.info} regexEmail={props.regexEmail}/>
+      <Footer siteName={props.siteName.split(/\./)[0]} info={props.info} regexEmail={props.regexEmail}/>
       <ScrollToTop/>
     </>
   );

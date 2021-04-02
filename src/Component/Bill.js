@@ -14,7 +14,6 @@ import addDot from "./Controler/addDotToNumberString"
 import convertTime from "./Controler/convertTime"
 
 const Bill = (props) => {
-	console.log(props);
 	const [placement, setPlacement] = useState("Click to copy")
 	const renderTooltip = (props) => (
 	  <Tooltip id="button-tooltip" {...props}>
@@ -28,11 +27,11 @@ const Bill = (props) => {
 	}
     return (
     	<Card className="shadow-container price">
-	        <Card.Header className={(!props.info.bank)?'bg-success text-light':'bg-danger text-light'}>
+	        <Card.Header className={(!props.info.bank)?'bg-success text-primary':'bg-danger text-primary'}>
 	          <Card.Title>Hóa đơn xác nhận {(!props.info.bank)?"mua":"bán"} WIN </Card.Title>
 	        </Card.Header>
 	        <Card.Body>
-	        	<Table striped bordered hover variant="dark" className="text-light">
+	        	<Table striped bordered hover variant="dark" className="text-primary">
 				  <tbody>
 				  		<tr>
 				      		<td className="fw-400 w-max-content">Mã giao dịch</td>
@@ -168,7 +167,7 @@ const Bill = (props) => {
 				    	</tr>
 				  </tbody>
 				</Table>
-				<div className="w-100 d-flex flex-row-reverse"><button className="btn btn-success text-light" onClick={()=>window.location.href="/"}>Giao dịch khác</button></div>
+				<div className="w-100 d-flex flex-row-reverse"><button className="btn btn-success text-primary" onClick={()=>window.location.href="/"}>Giao dịch khác</button></div>
 	        </Card.Body>
         </Card>
     )

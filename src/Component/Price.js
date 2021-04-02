@@ -70,7 +70,7 @@ const Price = (props)=>{
             <Card.Body className="d-flex flex-wrap pl-0 pr-0">
               <a href={"mailto:support@"+props.siteName.toLowerCase()+"."+props.siteName.split(".")[props.siteName.split(".").length-1].toLowerCase()} className="w-100 d-flex">
                 <FontAwesomeIcon icon={faEnvelopeOpenText} className="w-25 mt-1"/>
-                <p className="fw-400">{"support@"+props.siteName.toLowerCase()+"."+props.siteName.split(".")[props.siteName.split(".").length-1].toLowerCase()}</p>
+                <p className="fw-400">{"support@"+props.siteName.toLowerCase()}</p>
               </a>
               
             </Card.Body>
