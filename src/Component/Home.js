@@ -60,7 +60,6 @@ const Home = (props) => {
   return (
     <>
       <Preload style={style} siteName={props.siteName.split(/\./)[0]}/>
-      <Particles params={config} /> 
       <Header siteName={props.siteName.split(/\./)[0]} changeBill={changeBill}/>
       <div className="mt-5 mb-5 body">
           <div className="container">
